@@ -1,8 +1,13 @@
 var express = require('express');
 var app = express();
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+app.get('/:date', function (req, res) {
+  var paramDate = req.params.date; //string
+  
+  var result = {  "unix": null,
+                  "natural": null  }
+               
+  res.send(JSON.stringify(result));
 });
 
 app.listen(8080, function () {
