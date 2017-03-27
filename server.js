@@ -18,7 +18,9 @@ function getDate(ms) {
 }
 
 function isNaturalDate(param) {
-  return false;
+  var unix = Date.parse(param);
+  var isValid = !isNaN(unix);
+  return isValid ? true : false;
 }
 
 function getResult(unix, natural) {
@@ -28,18 +30,18 @@ function getResult(unix, natural) {
 
 app.get('/:date', function (req, res) {
   var paramDate = req.params.date; //string
-  var isNaturalDate = true;
-  var result = "";
   
   if (isValidUnix(paramDate)) {
-    var ms = parseInt(paramDate*1000);
-    var naturalDate = getDate(ms);
-    result = getResult(ms, naturalDate);
+    var unix = parseInt(paramDate);
+    var naturalDate = getDate(unix*1000);
+    var result = getResult(unix, naturalDate);
 
-  } else if (isNaturalDate) {
-    //from date to unix
+  } else if (isNaturalDate(paramDate)) {
+    var unix  = Date.parse(paramDate)/1000;
+    var result = getResult(unix, paramDate);
+    
   } else {
-    result = getResult(null, null);
+    var result = getResult(null, null);
   }
   
   res.send(JSON.stringify(result));
